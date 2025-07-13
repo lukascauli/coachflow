@@ -33,7 +33,7 @@
           <div class="hero-content">
             <div class="urgency-banner">
               <span class="urgency-icon">⚡</span>
-              <span>KOSTENFREIES LIVE-WEBINAR</span>
+              <span>KOSTENLOSES LIVE-WEBINAR</span>
               <span class="date-info">{{ getNextWebinarDate }}</span>
             </div>
             
@@ -259,7 +259,7 @@
             </div>
             
             <h1 class="hero-headline">
-              <span class="main-headline">{{ content.headlineDe || 'Der Selbstwert-Kompass' }}</span>
+              <span class="main-headline">{{ content.headlineDe || getFreebieTitle }}</span>
               <span class="sub-headline">{{ getFreebieSubHeadline }}</span>
             </h1>
             
@@ -287,9 +287,12 @@
               <div class="preview-content">
                 <h3>🌟 Das erwartet dich im Workbook:</h3>
                 <div class="freebie-contents">
-                  <div class="content-item" v-for="item in getFreebieContents" :key="item">
-                    <span class="content-icon">📋</span>
-                    {{ item }}
+                  <div class="content-item" v-for="(item, index) in getWorkbookBenefits" :key="index">
+                    <span class="content-icon">{{ item.icon }}</span>
+                    <div class="content-details">
+                      <strong>{{ item.title }}</strong>
+                      <p>{{ item.description }}</p>
+                    </div>
                   </div>
                 </div>
                 
@@ -332,7 +335,7 @@
         <div class="container">
           <h2 class="section-title">Was du mit dem Workbook erreichst:</h2>
           <div class="benefits-grid">
-            <div class="benefit-card" v-for="(benefit, index) in getFreebieBenefits" :key="index">
+            <div class="benefit-card" v-for="(benefit, index) in getWorkbookBenefits" :key="index">
               <div class="benefit-icon">{{ benefit.icon }}</div>
               <h3>{{ benefit.title }}</h3>
               <p>{{ benefit.description }}</p>
@@ -610,42 +613,39 @@ export default {
       return props.content?.freebieTitle || 'Der Selbstwert-Kompass';
     });
     
-    const getFreebieContents = computed(() => {
-      // Use AI-generated contents if available
-      if (props.content?.freebieContents && Array.isArray(props.content.freebieContents)) {
-        return props.content.freebieContents;
-      }
-      
+    const getWorkbookBenefits = computed(() => {
       return [
-        '15 Seiten geballtes Wissen',
-        'Selbstwert-Assessment',
-        '7 kraftvolle Übungen',
-        'Affirmations-Sammlung',
-        'Wochenplan für mehr Selbstliebe'
+        {
+          title: 'Erkenne deinen aktuellen Selbstwert-Status',
+          description: 'Mit dem Assessment findest du heraus, wo du stehst und welche Bereiche Aufmerksamkeit brauchen',
+          icon: '📊'
+        },
+        {
+          title: 'Praktische Übungen für jeden Tag',
+          description: '7 wissenschaftlich fundierte Techniken, die du sofort in deinen Alltag integrieren kannst',
+          icon: '💪'
+        },
+        {
+          title: 'Dein persönlicher Transformationsplan',
+          description: 'Ein strukturierter 4-Wochen-Plan führt dich Schritt für Schritt zu mehr Selbstliebe',
+          icon: '📅'
+        },
+        {
+          title: 'Kraftvolle Affirmationen & Mantras',
+          description: 'Eine Sammlung von 25 persönlich erprobten Affirmationen für verschiedene Lebensbereiche',
+          icon: '🌟'
+        },
+        {
+          title: 'Notfall-Toolkit für schwere Momente',
+          description: 'Konkrete Strategien und Übungen, wenn der Selbstwert mal wieder im Keller ist',
+          icon: '🆘'
+        }
       ];
     });
     
     const getDownloadCount = computed(() => {
       return Math.floor(Math.random() * 500) + 2500;
     });
-    
-    const getFreebieBenefits = computed(() => [
-      {
-        title: 'Erkenne deinen aktuellen Selbstwert-Status',
-        description: 'Mit dem Assessment findest du heraus, wo du stehst',
-        icon: '📊'
-      },
-      {
-        title: 'Praktische Übungen für jeden Tag',
-        description: '7 wissenschaftlich fundierte Techniken für den Alltag',
-        icon: '💪'
-      },
-      {
-        title: 'Dein persönlicher Transformationsplan',
-        description: 'Ein strukturierter Plan führt dich zu mehr Selbstliebe',
-        icon: '📅'
-      }
-    ]);
     
     const getPersonalIntro = computed(() => {
       return `Als erfahrene Coachin für ${props.content?.nicheDe || 'Selbstwert-Coaching & emotionale Heilung'} begleite ich Frauen dabei, zu ihrem wahren Selbst zu finden.`;
@@ -851,9 +851,8 @@ export default {
       getClarityProcess,
       getFreebieSubHeadline,
       getFreebieTitle,
-      getFreebieContents,
+      getWorkbookBenefits,
       getDownloadCount,
-      getFreebieBenefits,
       getPersonalIntro,
       getPersonalStory,
       getCredentials,
@@ -897,6 +896,11 @@ export default {
   --gradient: linear-gradient(135deg, var(--primary-color), #9B7CB8);
   --border-radius: 12px;
   --transition: all 0.3s ease;
+  
+  // Better contrast ratios
+  --text-on-light: #2D3748;
+  --text-on-primary: #FFFFFF;
+  --text-on-secondary: #4A5568;
   
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
@@ -988,7 +992,7 @@ export default {
         right: 0;
         bottom: 0;
         background: var(--gradient);
-        opacity: 0.05;
+        opacity: 0.08;
         animation: gradientShift 12s ease-in-out infinite;
       }
       
@@ -1025,7 +1029,7 @@ export default {
       transform: translateX(-50%);
       cursor: pointer;
       text-align: center;
-      color: var(--text-light);
+      color: var(--text-on-light);
       transition: var(--transition);
       z-index: 2;
       
@@ -1069,7 +1073,7 @@ export default {
     font-weight: 700;
     text-align: center;
     margin-bottom: 3rem;
-    color: var(--text-dark);
+    color: var(--text-on-light);
     
     @media (max-width: 768px) {
       font-size: 2rem;
@@ -1078,17 +1082,21 @@ export default {
 
   // WEBINAR DESIGN
   .webinar-hero {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #9B7CB8 100%);
+    color: var(--text-on-primary);
+    position: relative;
+    z-index: 1;
     
     .urgency-banner {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(20px);
       padding: 1rem 2rem;
       border-radius: 50px;
       text-align: center;
       margin-bottom: 3rem;
       font-weight: 700;
+      color: var(--text-on-primary);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       
       .urgency-icon {
         margin-right: 0.5rem;
@@ -1098,6 +1106,7 @@ export default {
       .date-info {
         margin-left: 1rem;
         font-size: 0.9rem;
+        opacity: 0.95;
       }
     }
     
@@ -1110,7 +1119,8 @@ export default {
         font-size: 1.25rem;
         font-weight: 600;
         margin-bottom: 1rem;
-        opacity: 0.9;
+        opacity: 0.95;
+        color: var(--text-on-primary);
       }
       
       .main-headline {
@@ -1119,6 +1129,8 @@ export default {
         font-weight: 800;
         line-height: 1.1;
         margin-bottom: 1.5rem;
+        color: var(--text-on-primary);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         
         @media (max-width: 768px) {
           font-size: 2.5rem;
@@ -1129,17 +1141,18 @@ export default {
         display: block;
         font-size: 1.25rem;
         opacity: 0.9;
+        color: var(--text-on-primary);
       }
     }
     
     .unique-method-highlight {
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(10px);
-      padding: 1rem 2rem;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(15px);
+      padding: 1.5rem 2rem;
       border-radius: var(--border-radius);
       text-align: center;
       margin-bottom: 3rem;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.4);
       
       .method-icon {
         font-size: 1.5rem;
@@ -1149,6 +1162,7 @@ export default {
       .method-text {
         font-size: 1.125rem;
         font-weight: 600;
+        color: var(--text-on-primary);
       }
     }
     
@@ -1161,7 +1175,7 @@ export default {
         max-width: 600px;
         margin: 0 auto;
         aspect-ratio: 16/9;
-        background: rgba(0, 0, 0, 0.4);
+        background: rgba(0, 0, 0, 0.5);
         border-radius: var(--border-radius);
         display: flex;
         flex-direction: column;
@@ -1169,16 +1183,17 @@ export default {
         justify-content: center;
         cursor: pointer;
         transition: var(--transition);
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
         
         &:hover {
           transform: scale(1.02);
+          border-color: rgba(255, 255, 255, 0.5);
         }
         
         .play-button {
           font-size: 4rem;
-          color: white;
-          background: rgba(255, 255, 255, 0.2);
+          color: var(--text-on-primary);
+          background: rgba(255, 255, 255, 0.3);
           width: 80px;
           height: 80px;
           border-radius: 50%;
@@ -1186,29 +1201,33 @@ export default {
           align-items: center;
           justify-content: center;
           margin-bottom: 1rem;
+          backdrop-filter: blur(10px);
         }
         
         .video-label {
-          background: rgba(0, 0, 0, 0.7);
+          background: rgba(0, 0, 0, 0.8);
           padding: 0.5rem 1rem;
           border-radius: 20px;
           font-size: 0.875rem;
+          color: var(--text-on-primary);
         }
       }
     }
     
     .registration-form {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(25px);
       padding: 3rem;
       border-radius: var(--border-radius);
       max-width: 500px;
       margin: 0 auto 3rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       
       h3 {
         text-align: center;
         margin-bottom: 2rem;
         font-size: 1.5rem;
+        color: var(--text-on-primary);
       }
       
       .form-fields {
@@ -1219,25 +1238,27 @@ export default {
         .form-input {
           width: 100%;
           padding: 1.25rem;
-          border: 2px solid rgba(255, 255, 255, 0.2);
+          border: 2px solid rgba(255, 255, 255, 0.3);
           border-radius: var(--border-radius);
           font-size: 1rem;
-          background: rgba(255, 255, 255, 0.1);
-          color: white;
+          background: rgba(255, 255, 255, 0.15);
+          color: var(--text-on-primary);
+          backdrop-filter: blur(10px);
           
           &::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.8);
           }
           
           &:focus {
             outline: none;
-            border-color: rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.2);
           }
         }
         
         .cta-primary {
           background: var(--warning-color);
-          color: white;
+          color: var(--text-on-primary);
           border: none;
           padding: 1.5rem;
           border-radius: var(--border-radius);
@@ -1245,10 +1266,12 @@ export default {
           font-weight: 700;
           cursor: pointer;
           transition: var(--transition);
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
           
           &:hover {
             transform: translateY(-3px);
             box-shadow: var(--shadow-lg);
+            filter: brightness(1.1);
           }
           
           .cta-icon {
@@ -1262,6 +1285,7 @@ export default {
         font-size: 0.875rem;
         opacity: 0.9;
         margin-top: 1.5rem;
+        color: var(--text-on-primary);
       }
     }
     
@@ -1271,18 +1295,23 @@ export default {
       .attendee-count {
         font-size: 1.125rem;
         margin-bottom: 1rem;
+        color: var(--text-on-primary);
         
         strong {
           font-size: 1.5rem;
           color: var(--warning-color);
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
       }
       
       .testimonial-mini {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.15);
         padding: 1rem 1.5rem;
         border-radius: var(--border-radius);
         font-style: italic;
+        color: var(--text-on-primary);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
       }
     }
   }
@@ -1290,7 +1319,7 @@ export default {
   // Benefits Grid
   .benefits-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
     
     .benefit-item {
@@ -1319,12 +1348,13 @@ export default {
         height: 60px;
         border-radius: 50%;
         background: var(--gradient);
-        color: white;
+        color: var(--text-on-primary);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.5rem;
         font-weight: 700;
+        flex-shrink: 0;
       }
       
       .benefit-content {
@@ -1337,11 +1367,12 @@ export default {
           font-size: 1.25rem;
           font-weight: 600;
           margin-bottom: 1rem;
-          color: var(--text-dark);
+          color: var(--text-on-light);
         }
         
         p {
           color: var(--text-light);
+          line-height: 1.7;
         }
       }
     }
@@ -1368,11 +1399,12 @@ export default {
         font-size: 1.25rem;
         font-weight: 600;
         margin-bottom: 1rem;
-        color: var(--text-dark);
+        color: var(--text-on-light);
       }
       
       p {
         color: var(--text-light);
+        line-height: 1.7;
       }
     }
   }
@@ -1395,7 +1427,7 @@ export default {
       .hero-content {
         .trust-badge {
           background: var(--success-color);
-          color: white;
+          color: var(--text-on-primary);
           padding: 0.75rem 1.5rem;
           border-radius: 25px;
           display: inline-flex;
@@ -1412,7 +1444,7 @@ export default {
             display: block;
             font-size: 3rem;
             font-weight: 700;
-            color: var(--text-dark);
+            color: var(--text-on-light);
             line-height: 1.2;
             margin-bottom: 1rem;
             
@@ -1425,6 +1457,7 @@ export default {
             display: block;
             font-size: 1.125rem;
             color: var(--text-light);
+            line-height: 1.6;
           }
         }
         
@@ -1439,7 +1472,7 @@ export default {
             font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
-            color: var(--text-dark);
+            color: var(--text-on-light);
           }
           
           .value-points {
@@ -1448,6 +1481,7 @@ export default {
               align-items: center;
               gap: 0.75rem;
               margin-bottom: 1rem;
+              color: var(--text-on-light);
               
               .point-icon {
                 font-size: 1.25rem;
@@ -1456,9 +1490,31 @@ export default {
           }
         }
         
+        .main-benefit-highlight, .offer-details {
+          background: rgba(125, 91, 166, 0.1);
+          padding: 1.5rem;
+          border-radius: var(--border-radius);
+          margin-bottom: 1.5rem;
+          border-left: 4px solid var(--primary-color);
+          
+          h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-on-light);
+          }
+          
+          p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-light);
+            margin: 0;
+          }
+        }
+        
         .cta-primary {
           background: var(--primary-color);
-          color: white;
+          color: var(--text-on-primary);
           border: none;
           padding: 1.25rem 2rem;
           border-radius: var(--border-radius);
@@ -1477,29 +1533,6 @@ export default {
           
           .cta-icon {
             margin-right: 0.5rem;
-          }
-        }
-        
-        .main-benefit-highlight, .offer-details {
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
-          padding: 1.5rem;
-          border-radius: var(--border-radius);
-          margin-bottom: 1.5rem;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          
-          h4 {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: white;
-          }
-          
-          p {
-            font-size: 1rem;
-            line-height: 1.6;
-            opacity: 0.95;
-            margin: 0;
           }
         }
         
@@ -1547,12 +1580,13 @@ export default {
         height: 60px;
         border-radius: 50%;
         background: var(--primary-color);
-        color: white;
+        color: var(--text-on-primary);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.5rem;
         font-weight: 700;
+        flex-shrink: 0;
       }
       
       .step-content {
@@ -1565,12 +1599,13 @@ export default {
           font-size: 1.5rem;
           font-weight: 600;
           margin-bottom: 1rem;
-          color: var(--text-dark);
+          color: var(--text-on-light);
         }
         
         p {
           color: var(--text-light);
           margin-bottom: 1rem;
+          line-height: 1.7;
         }
         
         .step-duration {
@@ -1607,7 +1642,8 @@ export default {
         font-style: italic;
         margin-bottom: 1.5rem;
         padding-left: 2rem;
-        color: var(--text-dark);
+        color: var(--text-on-light);
+        line-height: 1.7;
       }
       
       .client-info {
@@ -1620,17 +1656,18 @@ export default {
           height: 50px;
           border-radius: 50%;
           background: var(--gradient);
-          color: white;
+          color: var(--text-on-primary);
           display: flex;
           align-items: center;
           justify-content: center;
           font-weight: 600;
+          flex-shrink: 0;
         }
         
         .client-details {
           strong {
             display: block;
-            color: var(--text-dark);
+            color: var(--text-on-light);
           }
           
           span {
@@ -1644,7 +1681,7 @@ export default {
 
   // FREEBIE DESIGN
   .freebie-hero {
-    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+    background: linear-gradient(135deg, var(--secondary-color) 0%, rgba(125, 91, 166, 0.1) 100%);
     
     .hero-content {
       max-width: 1000px;
@@ -1653,7 +1690,7 @@ export default {
       
       .freebie-badge {
         background: var(--primary-color);
-        color: white;
+        color: var(--text-on-primary);
         padding: 0.75rem 2rem;
         border-radius: 25px;
         display: inline-flex;
@@ -1674,7 +1711,7 @@ export default {
           display: block;
           font-size: 3.5rem;
           font-weight: 800;
-          color: var(--text-dark);
+          color: var(--text-on-light);
           line-height: 1.1;
           margin-bottom: 1rem;
           
@@ -1687,12 +1724,13 @@ export default {
           display: block;
           font-size: 1.25rem;
           color: var(--text-light);
+          line-height: 1.6;
         }
       }
       
       .unique-method-highlight {
         background: rgba(255, 255, 255, 0.9);
-        padding: 1rem 2rem;
+        padding: 1.5rem 2rem;
         border-radius: var(--border-radius);
         margin-bottom: 2rem;
         border-left: 4px solid var(--primary-color);
@@ -1705,7 +1743,7 @@ export default {
         .method-text {
           font-size: 1.125rem;
           font-weight: 600;
-          color: var(--text-dark);
+          color: var(--text-on-light);
         }
       }
       
@@ -1720,7 +1758,7 @@ export default {
           font-size: 1.5rem;
           font-weight: 700;
           margin-bottom: 1rem;
-          color: var(--text-dark);
+          color: var(--text-on-light);
         }
         
         p {
@@ -1753,7 +1791,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--text-on-primary);
             font-size: 1.5rem;
             font-weight: 600;
             box-shadow: var(--shadow-lg);
@@ -1772,7 +1810,7 @@ export default {
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
-            color: var(--text-dark);
+            color: var(--text-on-light);
           }
           
           .freebie-contents {
@@ -1780,12 +1818,34 @@ export default {
             
             .content-item {
               display: flex;
-              align-items: center;
-              gap: 0.75rem;
-              margin-bottom: 1rem;
+              align-items: flex-start;
+              gap: 1rem;
+              margin-bottom: 1.5rem;
+              padding: 1rem;
+              background: rgba(255, 255, 255, 0.7);
+              border-radius: var(--border-radius);
+              border-left: 3px solid var(--primary-color);
               
               .content-icon {
-                font-size: 1.25rem;
+                font-size: 1.5rem;
+                flex-shrink: 0;
+                margin-top: 0.25rem;
+              }
+              
+              .content-details {
+                strong {
+                  display: block;
+                  font-size: 1.1rem;
+                  color: var(--text-on-light);
+                  margin-bottom: 0.5rem;
+                }
+                
+                p {
+                  color: var(--text-light);
+                  font-size: 0.95rem;
+                  line-height: 1.6;
+                  margin: 0;
+                }
               }
             }
           }
@@ -1800,7 +1860,17 @@ export default {
               font-size: 1.25rem;
               font-weight: 600;
               margin-bottom: 1.5rem;
-              color: var(--text-dark);
+              color: var(--text-on-light);
+            }
+            
+            .offer-preview {
+              margin-bottom: 1.5rem;
+              
+              .offer-text {
+                color: var(--text-light);
+                line-height: 1.6;
+                font-style: italic;
+              }
             }
             
             .form-input {
@@ -1810,16 +1880,21 @@ export default {
               border-radius: var(--border-radius);
               font-size: 1rem;
               margin-bottom: 1rem;
+              color: var(--text-on-light);
               
               &:focus {
                 outline: none;
                 border-color: var(--primary-color);
               }
+              
+              &::placeholder {
+                color: var(--text-light);
+              }
             }
             
             .cta-primary {
               background: var(--gradient);
-              color: white;
+              color: var(--text-on-primary);
               border: none;
               padding: 1.25rem;
               border-radius: var(--border-radius);
@@ -1833,6 +1908,7 @@ export default {
               &:hover {
                 transform: translateY(-2px);
                 box-shadow: var(--shadow-lg);
+                filter: brightness(1.1);
               }
               
               .cta-icon {
@@ -1861,6 +1937,7 @@ export default {
         
         .download-count {
           font-size: 1.125rem;
+          color: var(--text-on-light);
           
           strong {
             font-size: 1.5rem;
@@ -1872,6 +1949,7 @@ export default {
           display: flex;
           align-items: center;
           gap: 0.5rem;
+          color: var(--text-on-light);
           
           .stars {
             color: var(--warning-color);
@@ -1916,7 +1994,7 @@ export default {
         font-size: 2rem;
         font-weight: 700;
         margin-bottom: 1.5rem;
-        color: var(--text-dark);
+        color: var(--text-on-light);
       }
       
       .about-intro {
@@ -1939,6 +2017,7 @@ export default {
           gap: 0.5rem;
           margin-bottom: 0.75rem;
           font-weight: 500;
+          color: var(--text-on-light);
         }
       }
     }
@@ -1967,7 +2046,7 @@ export default {
         justify-content: space-between;
         align-items: center;
         font-weight: 600;
-        color: var(--text-dark);
+        color: var(--text-on-light);
         
         .faq-toggle {
           font-size: 1.5rem;
@@ -2001,7 +2080,7 @@ export default {
     top: 1rem;
     right: 1rem;
     background: var(--primary-color);
-    color: white;
+    color: var(--text-on-primary);
     padding: 0.5rem 1rem;
     border-radius: 25px;
     font-size: 0.875rem;
@@ -2022,7 +2101,7 @@ export default {
     .edit-button, .delete-button {
       background: none;
       border: none;
-      color: white;
+      color: var(--text-on-primary);
       padding: 0.25rem 0.5rem;
       border-radius: 4px;
       cursor: pointer;
@@ -2118,7 +2197,7 @@ export default {
       
       .cta-sticky {
         background: var(--primary-color);
-        color: white;
+        color: var(--text-on-primary);
         border: none;
         padding: 0.875rem 2rem;
         border-radius: var(--border-radius);
@@ -2168,7 +2247,7 @@ export default {
         
         h3 {
           margin: 0;
-          color: var(--text-dark);
+          color: var(--text-on-light);
         }
         
         .close-button {
@@ -2179,7 +2258,7 @@ export default {
           color: var(--text-light);
           
           &:hover {
-            color: var(--text-dark);
+            color: var(--text-on-light);
           }
         }
       }
@@ -2209,7 +2288,7 @@ export default {
           
           p {
             margin-bottom: 0.5rem;
-            color: var(--text-dark);
+            color: var(--text-on-light);
             font-weight: 600;
           }
           
@@ -2225,10 +2304,15 @@ export default {
           border-radius: var(--border-radius);
           font-size: 1rem;
           margin-bottom: 1.5rem;
+          color: var(--text-on-light);
           
           &:focus {
             outline: none;
             border-color: var(--primary-color);
+          }
+          
+          &::placeholder {
+            color: var(--text-light);
           }
         }
         
@@ -2252,7 +2336,7 @@ export default {
           
           .save-button {
             background: var(--primary-color);
-            color: white;
+            color: var(--text-on-primary);
             border: none;
             
             &:hover {
@@ -2262,7 +2346,7 @@ export default {
           
           .cancel-button {
             background: var(--bg-light);
-            color: var(--text-dark);
+            color: var(--text-on-light);
             border: 2px solid var(--accent-color);
             
             &:hover {

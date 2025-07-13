@@ -1,5 +1,5 @@
 // ===========================================
-// 1. ERWEITERTE WW-CONFIG.JS
+// OPTIMIERTE WW-CONFIG.JS
 // ===========================================
 
 export default {
@@ -268,8 +268,45 @@ export default {
       ],
     },
     
+    // NEUE: Strukturierte Workbook Benefits (ersetzt freebieContents)
+    workbookBenefits: {
+      label: { en: 'Workbook Benefits', de: 'Workbook-Vorteile' },
+      type: 'Array',
+      bindable: true,
+      readonly: true,
+      section: 'ai-generated',
+      defaultValue: [
+        {
+          title: 'Erkenne deinen aktuellen Selbstwert-Status',
+          description: 'Mit dem Assessment findest du heraus, wo du stehst und welche Bereiche Aufmerksamkeit brauchen',
+          icon: '📊'
+        },
+        {
+          title: 'Praktische Übungen für jeden Tag',
+          description: '7 wissenschaftlich fundierte Techniken, die du sofort in deinen Alltag integrieren kannst',
+          icon: '💪'
+        },
+        {
+          title: 'Dein persönlicher Transformationsplan',
+          description: 'Ein strukturierter 4-Wochen-Plan führt dich Schritt für Schritt zu mehr Selbstliebe',
+          icon: '📅'
+        },
+        {
+          title: 'Kraftvolle Affirmationen & Mantras',
+          description: 'Eine Sammlung von 25 persönlich erprobten Affirmationen für verschiedene Lebensbereiche',
+          icon: '🌟'
+        },
+        {
+          title: 'Notfall-Toolkit für schwere Momente',
+          description: 'Konkrete Strategien und Übungen, wenn der Selbstwert mal wieder im Keller ist',
+          icon: '🆘'
+        }
+      ],
+    },
+    
+    // DEPRECATED: Wird durch workbookBenefits ersetzt
     freebieContents: {
-      label: { en: 'Freebie Contents', de: 'Freebie-Inhalte' },
+      label: { en: 'Freebie Contents (Legacy)', de: 'Freebie-Inhalte (Legacy)' },
       type: 'Array',
       bindable: true,
       readonly: true,
@@ -281,6 +318,7 @@ export default {
         'Affirmations-Sammlung',
         'Wochenplan für mehr Selbstliebe'
       ],
+      hidden: true, // Versteckt, aber für Backward-Compatibility
     },
     
     // AI-Farbempfehlungen
@@ -430,7 +468,7 @@ export default {
       section: 'styling',
     },
 
-    // Typography
+    // Typography & Design
     fontFamily: {
       label: { en: 'Font Family', de: 'Schriftart' },
       type: 'TextSelect',
@@ -503,7 +541,7 @@ export default {
       }
     },
 
-    // Button Styling
+    // Button & Animation Settings
     buttonStyle: {
       label: { en: 'Button Style', de: 'Button-Stil' },
       type: 'TextSelect',
@@ -519,7 +557,6 @@ export default {
       }
     },
 
-    // Animation Controls
     enableAnimations: {
       label: { en: 'Enable Animations', de: 'Animationen aktivieren' },
       type: 'OnOff',
@@ -536,7 +573,7 @@ export default {
       section: 'styling',
     },
 
-    // Social Proof Customization
+    // Social Proof & Urgency
     attendeeCountMin: {
       label: { en: 'Min Attendees (Social Proof)', de: 'Min. Teilnehmer (Social Proof)' },
       type: 'Number',

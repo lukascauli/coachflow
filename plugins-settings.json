@@ -1,4 +1,11 @@
 {
+    "1fa0dd68-5069-436c-9a7d-3b54c340f1fa": {
+        "id": "e386fd07-6db2-44cf-b1f1-991e2504c901",
+        "name": "Supabase Auth",
+        "designId": "ad44dd8c-dc3f-4a5c-b4ad-6ae078c3eec5",
+        "pluginId": "1fa0dd68-5069-436c-9a7d-3b54c340f1fa",
+        "publicData": {}
+    },
     "2bd1c688-31c5-443e-ae25-59aa5b6431fb": {
         "id": "80eb99ae-45ec-4b15-a1a1-439597e007aa",
         "name": "REST API",
